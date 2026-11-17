@@ -12,6 +12,7 @@ export async function GET(_req, { params }) {
     status: a.status, spec: a.spec, day: a.day, slot: a.slot,
     patient: a.child_name || a.patient_name, doctor: a.doctor_name, photo: a.doctor_photo,
     note: a.status === "rejected" ? a.note : null,
+    expired: a.status === "cancelled" && a.cancelled_by === "system",
     canCancel: active && Number(a.hours_left) >= CANCEL_HOURS,
     tooLate: active && Number(a.hours_left) < CANCEL_HOURS && Number(a.hours_left) > 0,
     phone: process.env.CLINIC_PHONE || "0752 192 733",

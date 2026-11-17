@@ -5,6 +5,7 @@ import { slotIsFree } from "@/lib/slots.js";
 import { isDay, isTime, addDays, nowLocal } from "@/lib/time.js";
 import { json, fail, digits, baseUrl, insertAppointment } from "@/lib/util.js";
 import { notify } from "@/lib/email.js";
+import { expireStale } from "@/lib/expire.js";
 export const dynamic = "force-dynamic";
 
 const COLS = sql`a.id, a.ref, a.token, a.doctor_id, d.name as doctor_name, a.spec, a.day::text as day, to_char(a.slot,'HH24:MI') as slot,
@@ -15,6 +16,7 @@ const COLS = sql`a.id, a.ref, a.token, a.doctor_id, d.name as doctor_name, a.spe
 export async function GET(req) {
   const auth = await requireStaff(req);
   if (auth.error) return fail(auth.error, auth.status);
+  await expireStale();
   const q = new URL(req.url).searchParams;
   const today = nowLocal().day;
   const from = isDay(q.get("from")) ? q.get("from") : addDays(today, -14);

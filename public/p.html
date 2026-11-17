@@ -50,7 +50,7 @@ function render(){
   if(a.status==="pending")msg='<div class="alert info">Ora e rezervată pentru tine. Recepția îți verifică cererea și te sună să ți-o confirme.</div>';
   if(a.status==="confirmed")msg='<div class="alert info" style="background:#E5F2EA;border-color:#BFDCC9;color:#1F5233">Programarea e confirmată. Te așteptăm.</div>';
   if(a.status==="rejected")msg=`<div class="alert bad">Recepția nu a putut confirma cererea${a.note?": "+esc(a.note):"."} Poți face o <a href="/#programare">programare nouă</a> sau suna la recepție.</div>`;
-  if(a.status==="cancelled")msg='<div class="alert info">Programarea a fost anulată. Ora a devenit liberă pentru alți pacienți.</div>';
+  if(a.status==="cancelled")msg=a.expired?`<div class="alert bad">Ne cerem scuze, recepția nu a apucat să confirme cererea la timp, așa că ea a expirat. Sună la recepție și găsim împreună o oră.</div>`:'<div class="alert info">Programarea a fost anulată. Ora a devenit liberă pentru alți pacienți.</div>';
   if(a.tooLate)msg+=`<div class="alert warn">Programarea e în mai puțin de 48 de ore, așa că nu mai poate fi anulată online. Dacă nu poți ajunge, sună la recepție.</div>`;
   box.innerHTML=`<div class="pm-doc">${a.photo?`<img src="${esc(a.photo)}" alt="">`:""}<div><h3>${esc(a.doctor)}</h3><span class="muted">${esc(a.spec)}</span></div></div>
     <div class="summary">
@@ -60,7 +60,7 @@ function render(){
       <div><span>Status</span>${statusPill(a.status)}</div>
     </div>
     ${msg}
-    <div style="display:flex;gap:.6rem;flex-wrap:wrap">${a.canCancel?'<button class="btn btn-ghost" id="cancel" style="color:var(--bad);border-color:#e4b2ab">Anulează programarea</button>':""}${a.status==="pending"||a.status==="confirmed"||a.status==="rejected"?call:""}</div>`;
+    <div style="display:flex;gap:.6rem;flex-wrap:wrap">${a.canCancel?'<button class="btn btn-ghost" id="cancel" style="color:var(--bad);border-color:#e4b2ab">Anulează programarea</button>':""}${a.status==="pending"||a.status==="confirmed"||a.status==="rejected"||a.expired?call:""}</div>`;
   const c=$("#cancel");if(c)c.onclick=()=>openModal(`<h3>Anulezi programarea?</h3><p class="muted">${esc(a.doctor)}, ${fmtLong(a.day)}, ora ${a.slot}. Ora devine liberă pentru alți pacienți.</p><p id="cErr" class="muted" style="color:var(--bad)"></p><div style="display:flex;gap:.6rem;justify-content:flex-end"><button class="btn btn-ghost" data-close>Păstrează</button><button class="btn btn-dark" id="cfCancel">Da, anulează</button></div>`,()=>{
     $("#cfCancel").onclick=async()=>{const b=$("#cfCancel");b.disabled=true;b.textContent="Se anulează…";
       try{await api(`/api/public/manage/${token}/cancel`,{method:"POST",body:{}});closeModal();toast("Programare anulată","Recepția a fost anunțată.");load()}

@@ -12,6 +12,7 @@ Site-ul clinicii Piuarfil (Dumbrăveni) cu programări online și panou pentru r
 - Tab-ul **Reminder mâine** listează pacienții de a doua zi, cu buton de reminder pe WhatsApp pentru fiecare.
 - Când un pacient își anulează programarea din link, recepția vede imediat un avertisment în panou („Anulări noi”), ca să poată da ora altcuiva.
 - Mesajele de WhatsApp nu conțin date medicale: doar medicul, ziua, ora și linkul.
+- Cererile neconfirmate: după 24h apar în panou cu „Așteaptă de …”; cele pentru mâine apar cu „Expiră la miezul nopții”. Dacă recepția nu le confirmă până în ziua programării, se anulează automat și ora se eliberează (pacientul vede în linkul lui că cererea a expirat). Nu e nevoie de un job programat: verificarea rulează la fiecare citire a disponibilității sau a panoului.
 - O oră nu poate fi rezervată de două ori: baza de date garantează asta (index unic pe medic + zi + oră).
 - Regula de 48h la anulare e verificată pe server.
 - Sărbătorile legale și zilele libere ale medicilor închid automat ziua.

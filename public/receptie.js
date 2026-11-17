@@ -10,6 +10,7 @@ function waText(a,kind){
   return {confirm:`Bună ziua! Programarea dvs.${cine} la Piuarfil este confirmată: ${d.name}, ${cand}.\nDetalii sau anulare (cu minimum 48h înainte): ${link}\nVă așteptăm!`,
     move:`Bună ziua! Programarea dvs.${cine} la Piuarfil a fost mutată: ${d.name}, ${cand}.\nDetalii sau anulare: ${link}`,
     remind:`Bună ziua! Vă reamintim de programarea dvs.${cine} de mâine la Piuarfil: ${d.name}, ora ${a.slot}.\nDacă nu mai puteți ajunge, vă rugăm să ne anunțați răspunzând la acest mesaj. Vă mulțumim!`,
+    expired:`Bună ziua! Ne cerem scuze, nu am reușit să confirmăm la timp cererea dvs.${cine} pentru ${d.name} (${cand}). Vă rugăm să ne răspundeți aici și găsim împreună o oră potrivită.`,
     reject:`Bună ziua! Din păcate nu putem confirma programarea${cine} cerută la ${d.name} (${cand}). ${a.note||""}\nVă rugăm să alegeți altă oră pe site sau să ne răspundeți aici.`,
     cancel:`Bună ziua! Programarea dvs.${cine} la Piuarfil (${d.name}, ${cand}) a fost anulată. ${a.note&&!/recep/i.test(a.note)?a.note:""}\nPentru o programare nouă ne puteți scrie aici.`}[kind];
 }
@@ -67,7 +68,7 @@ function render(){
                :[["mine","Ziua mea"],["agenda","Agendă"],["past","Istoric"]];
   let list;
   switch(S.filter){
-    case "pending":list=pend.slice().sort((a,b)=>(b.urgent-a.urgent)||(a.day+a.slot).localeCompare(b.day+b.slot));break;
+    case "pending":list=pend.slice().sort((a,b)=>(b.urgent-a.urgent)||((a.day===tom)?0:1)-((b.day===tom)?0:1)||(a.day+a.slot).localeCompare(b.day+b.slot));break;
     case "call":list=toCall;break;
     case "remind":list=all.filter(a=>a.day===tom&&a.status==="confirmed");break;
     case "today":list=all.filter(a=>a.day===T&&a.status==="confirmed");break;
@@ -105,13 +106,18 @@ function item(a){
   let acts="";
   if(ed&&a.status==="pending")acts=`<button class="btn btn-gold btn-sm" data-a="confirm" data-id="${a.id}">Confirmă</button><button class="btn btn-ghost btn-sm" data-a="move" data-id="${a.id}">Altă oră</button><button class="btn btn-ghost btn-sm" data-a="reject" data-id="${a.id}">Respinge</button>`;
   if(ed&&a.status==="confirmed"&&future)acts=`${S.filter==="remind"?(a.reminded_at?'<span class="chip">✓ reminder trimis</span>':waBtn(a,"remind","Reminder")):!a.notified?`${waBtn(a,/mutat/i.test(a.note||"")?"move":"confirm","WhatsApp")}<a class="btn btn-ghost btn-sm" href="${telHref(a.phone)}">Sună</a><button class="btn btn-ghost btn-sm" data-a="notified" data-id="${a.id}">Am anunțat</button>`:""}<button class="btn btn-ghost btn-sm" data-a="move" data-id="${a.id}">Mută</button><button class="btn btn-ghost btn-sm" data-a="cancel" data-id="${a.id}">Anulează</button>`;
-  if(ed&&(a.status==="rejected"||(a.status==="cancelled"&&!byPatient(a)))&&future&&!a.notified)acts=`${waBtn(a,a.status==="rejected"?"reject":"cancel","Anunță pe WhatsApp")}<button class="btn btn-ghost btn-sm" data-a="notified" data-id="${a.id}">Am anunțat</button>`;
+  if(ed&&(a.status==="rejected"||(a.status==="cancelled"&&!byPatient(a)))&&future&&!a.notified)acts=`${waBtn(a,a.status==="rejected"?"reject":a.cancelled_by==="system"?"expired":"cancel","Anunță pe WhatsApp")}<button class="btn btn-ghost btn-sm" data-a="notified" data-id="${a.id}">Am anunțat</button>`;
   if(ed&&byPatient(a)&&!seenSet().has(a.id)&&future)acts=`<span class="pill urgent" style="background:var(--warn)">Anulare nouă</span><button class="btn btn-ghost btn-sm" data-a="seen" data-id="${a.id}">Am văzut</button>`;
+  let wait="";
+  if(ed&&a.status==="pending"){const h=Math.floor((Date.now()-new Date(a.created_at))/36e5),tom=a.day===addDaysStr(S.today,1);
+    if(tom)wait='<span class="pill urgent" title="Dacă nu e confirmată azi, cererea se anulează automat la miezul nopții">Expiră la miezul nopții</span>';
+    else if(h>=24)wait=`<span class="pill urgent" style="background:var(--warn)">Așteaptă de ${h>=48?Math.floor(h/24)+" zile":h+" h"}</span>`;}
+  if(a.status==="cancelled"&&a.cancelled_by==="system")wait='<span class="chip">expirată, neconfirmată la timp</span>';
   const who=a.child_name?`${esc(a.child_name)}<br><span class="muted" style="font-size:.85rem;font-weight:400">Copil${a.child_age?", "+esc(a.child_age):""} · părinte: ${esc(a.patient_name)}</span>`:esc(a.patient_name);
   return `<article class="rx-item ${a.urgent&&a.status==="pending"?"isurgent":""}">
     <div class="rx-row">
       <div class="rx-when"><b>${a.slot}</b><small>${fmtLong(a.day)}</small></div>
-      <div><b>${who}</b> ${a.urgent?'<span class="pill urgent">URGENT</span>':""}${a.source==="telefon"?' <span class="chip">telefon</span>':""}<br>
+      <div><b>${who}</b> ${a.urgent?'<span class="pill urgent">URGENT</span>':""} ${wait}${a.source==="telefon"?' <span class="chip">telefon</span>':""}<br>
         <a class="muted" style="font-size:.88rem" href="${telHref(a.phone)}">${fmtPhone(a.phone)}</a>${a.email?`<span class="muted" style="font-size:.88rem"> · ${esc(a.email)}</span>`:""}
         ${ed&&a.status==="confirmed"&&future?`<br><span class="chip" style="margin-top:.3rem;display:inline-block">${a.notified?"✓ anunțat":"de anunțat"+(a.email?" (are email)":"")}</span>`:""}</div>
       <div><span style="display:flex;align-items:center;gap:.5rem"><img class="avatar" style="width:34px;height:34px" src="${esc(d.photo)}" alt=""><span><b style="font-size:.92rem">${esc(d.name)}</b><br><span class="muted" style="font-size:.85rem">${esc(a.spec)}</span></span></span></div>

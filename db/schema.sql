@@ -72,7 +72,7 @@ create table if not exists appointments (
   urgent          boolean not null default false,
   notified        boolean not null default false,       -- recepția a anunțat pacientul (WhatsApp / telefon)
   reminded_at     timestamptz,                          -- reminderul de cu o zi înainte a fost trimis
-  cancelled_by    text check (cancelled_by in ('patient','staff')),
+  cancelled_by    text check (cancelled_by in ('patient','staff','system')),  -- system = cerere neconfirmată la timp
   note            text,                                 -- motiv respingere / observații
   consent_at      timestamptz,
   created_at      timestamptz not null default now(),
@@ -109,4 +109,6 @@ alter table audit_log    enable row level security;
 
 -- Pentru baze de date create cu o versiune anterioară a acestui fișier
 alter table appointments add column if not exists reminded_at timestamptz;
-alter table appointments add column if not exists cancelled_by text check (cancelled_by in ('patient','staff'));
+alter table appointments add column if not exists cancelled_by text;
+alter table appointments drop constraint if exists appointments_cancelled_by_check;
+alter table appointments add constraint appointments_cancelled_by_check check (cancelled_by in ('patient','staff','system'));
