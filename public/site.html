@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Piuarfil Clinică Medicală</title>
+<meta name="description" content="Piuarfil, clinică medicală de familie în Dumbrăveni. Nouă medici, șapte specialități. Programează-te online, iar recepția te confirmă personal.">
+<meta property="og:title" content="Piuarfil Clinică Medicală · Programări online">
+<meta property="og:description" content="Alege medicul și ora online. Recepția te confirmă personal.">
+<meta name="theme-color" content="#11304D">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 56'%3E%3Cpath d='M32 6c9 6 11 20 0 30C21 26 23 12 32 6z' fill='%23C8B4A6'/%3E%3Cpath d='M8 26c10-5 23 0 26 14C20 44 10 37 8 26z' fill='%23A98E80'/%3E%3Cpath d='M56 26c-10-5-23 0-26 14 14 4 24-3 26-14z' fill='%23D9C2A8'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="logo" viewBox="0 0 64 56">
+    <g>
+      <path d="M32 6c9 6 11 20 0 30C21 26 23 12 32 6z" fill="#C8B4A6" opacity=".9"/>
+      <path d="M8 26c10-5 23 0 26 14C20 44 10 37 8 26z" fill="#A98E80" opacity=".85"/>
+      <path d="M56 26c-10-5-23 0-26 14 14 4 24-3 26-14z" fill="#D9C2A8" opacity=".85"/>
+    </g>
+  </symbol>
+</svg>
+
+<!-- ============ SITE ============ -->
+<div id="site">
+<header class="top" id="top">
+  <div class="wrap nav">
+    <a class="brand" href="#acasa" aria-label="Piuarfil, la începutul paginii"><svg aria-hidden="true"><use href="#logo"/></svg><b>PIUARFIL<small>CLINICĂ MEDICALĂ</small></b></a>
+    <ul>
+      <li><a href="#medici">Medici</a></li>
+      <li><a href="#servicii">Specialități</a></li>
+      <li><a href="#gestionare">Programarea mea</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a class="btn btn-gold btn-sm" href="#programare">Programează-te</a>
+  </div>
+</header>
+
+<main id="acasa">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="kicker">Clinică medicală în Dumbrăveni</p>
+        <h1><span>Medicii tăi,</span><span>aproape de casă.</span></h1>
+        <p class="lead">O clinică de familie în care te primim ca pe cineva de-al casei. Nouă medici, șapte specialități, iar programarea o faci acum online.</p>
+        <div class="hero-cta">
+          <a class="btn btn-gold" href="#programare">Programează-te online</a>
+          <a class="link" href="#gestionare">Am deja o programare</a>
+        </div>
+        <div class="team-line"><div class="faces" id="heroFaces"></div><span>Medicină de familie, pediatrie, cardiologie, ginecologie, stomatologie și altele</span></div>
+      </div>
+      <div class="stage">
+        <div class="stage-bg"></div>
+        <div class="ring-view" id="ringView" role="region" aria-roledescription="carusel" aria-label="Echipa de medici Piuarfil">
+          <div class="ring" id="ring"></div>
+        </div>
+        <div class="ring-cap">
+          <button class="rb" id="ringPrev" aria-label="Medicul anterior"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+          <div class="who" id="ringWho" aria-live="polite"><b></b><span></span></div>
+          <button class="btn btn-gold" id="ringBook">Programează-te</button>
+          <button class="rb" id="ringNext" aria-label="Medicul următor"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="home" id="acasa-noastra">
+    <div class="wrap home-grid">
+      <svg class="house church" viewBox="0 0 320 260" aria-hidden="true">
+        <defs>
+          <radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#F6D9A8" stop-opacity=".9"/><stop offset="1" stop-color="#F6D9A8" stop-opacity="0"/></radialGradient>
+          <linearGradient id="light" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFEBC4"/><stop offset="1" stop-color="#F2C27A"/></linearGradient>
+        </defs>
+        <path class="h-fade" d="M50 150 146 112v-30h28v30l96 38v94H50z" fill="#FBF7F1"/>
+        <circle class="h-halo" cx="160" cy="22" r="32" fill="url(#halo)"/>
+        <!-- crucea simplă -->
+        <path class="h-draw" d="M160 4v38M149 15h22" stroke="#A99383" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <!-- turnul cu vârf ascuțit -->
+        <path class="h-draw" d="M144 74 160 44l16 30" stroke="#11304D" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path class="h-draw" d="M146 74v44M174 74v44M144 74h32" stroke="#11304D" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+        <circle class="h-glow" cx="160" cy="94" r="7" fill="url(#light)"/>
+        <circle class="h-draw" cx="160" cy="94" r="7" stroke="#11304D" stroke-width="3" fill="none"/>
+        <!-- acoperișul în două ape -->
+        <path class="h-draw" d="M30 158 146 110M174 110l116 48" stroke="#11304D" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <!-- zidurile -->
+        <path class="h-draw" d="M50 151v99M270 151v99" stroke="#11304D" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <!-- ferestre înalte, luminate -->
+        <path class="h-glow" d="M72 230v-42a9 9 0 0 1 18 0v42z M104 230v-42a9 9 0 0 1 18 0v42z M198 230v-42a9 9 0 0 1 18 0v42z M230 230v-42a9 9 0 0 1 18 0v42z" fill="url(#light)"/>
+        <path class="h-draw" d="M72 230v-42a9 9 0 0 1 18 0v42z M104 230v-42a9 9 0 0 1 18 0v42z M198 230v-42a9 9 0 0 1 18 0v42z M230 230v-42a9 9 0 0 1 18 0v42z" stroke="#11304D" stroke-width="3.5" fill="none" stroke-linejoin="round"/>
+        <!-- ușa dublă și treptele -->
+        <path class="h-draw" d="M140 238v-42a20 20 0 0 1 40 0v42" stroke="#11304D" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <path class="h-draw" d="M160 176v62" stroke="#11304D" stroke-width="2.5" fill="none"/>
+        <path class="h-draw" d="M128 238h64M120 244h80" stroke="#A99383" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <!-- pământul -->
+        <path class="h-draw" d="M8 250h304" stroke="#A99383" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <div class="home-copy">
+        <p class="home-k">Motto-ul casei noastre</p>
+        <blockquote>„Dumnezeu în casa noastră.”</blockquote>
+        <p class="lead">Piuarfil e o clinică de familie, nu un cabinet oarecare. Te primim ca pe cineva de-al casei: medicii te știu pe nume, recepția te sună înapoi, iar între tablourile de pe pereți nu te simți niciodată un număr pe o listă.</p>
+        <div class="home-sign"><svg viewBox="0 0 64 56" aria-hidden="true"><use href="#logo"/></svg><span>Familia Piu și echipa Piuarfil</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="clinica">
+    <div class="wrap how">
+      <div class="sec-head" style="margin:0">
+        <h2>Programarea, fără telefoane ocupate</h2>
+        <p class="lead">Trimiți cererea oricând, din telefon. Recepția o vede imediat și te confirmă ea, ca până acum, doar fără așteptare la telefon.</p>
+      </div>
+      <ol class="steps3">
+        <li><b>Alegi medicul și ora</b><p>Vezi doar orele libere ale medicului, pe următoarele două săptămâni.</p></li>
+        <li><b>Recepția te confirmă</b><p>Primești confirmarea pe email sau telefon, cu un cod de programare.</p></li>
+        <li><b>Vii la consultație</b><p>Dacă nu mai poți ajunge, anulezi online cu cel puțin 48 de ore înainte.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="block" id="medici" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Oamenii care te primesc</h2>
+        <p class="lead">Treci cu mouse-ul peste un medic ca să vezi zilele în care consultă și să te programezi direct la el.</p>
+      </div>
+      <div class="filters" id="filters" role="group" aria-label="Filtrează după specialitate"></div>
+      <div class="team" id="team"></div>
+      <p class="demo-note">Zilele de consultații sunt provizorii, până le primim de la clinică.</p>
+    </div>
+  </section>
+
+  <section class="block" id="servicii" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Specialități</h2>
+      </div>
+      <ul class="spec-list" id="specList"></ul>
+      <p class="demo-note">Specialitățile medicilor de pe @piuarfil. Completăm lista împreună cu clinica.</p>
+    </div>
+  </section>
+
+  <section class="block" id="programare" style="background:var(--stripes),linear-gradient(180deg,var(--ice),#DDE8F2)">
+    <div class="wrap book-wrap">
+      <div class="sec-head" style="margin:0">
+        <h2>Programează-te online</h2>
+        <p class="lead">Durează în jur de două minute. Cererea ajunge la recepție, care te confirmă personal.</p>
+      </div>
+      <div class="booking">
+        <aside class="steps" id="stepList"></aside>
+        <div class="pane" id="pane" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="gestionare">
+    <div class="wrap manage">
+      <div class="sec-head" style="margin:0">
+        <h2>Ai deja o programare?</h2>
+        <p class="lead">După ce trimiți cererea primești un link personal. Din el îți vezi ziua, ora și medicul, și poți anula cu cel puțin 48 de ore înainte.</p>
+      </div>
+      <div class="card" style="display:grid;gap:.8rem">
+        <h3>Nu mai găsești linkul?</h3>
+        <p class="muted">Îl găsești pe ecranul de final al programării și, dacă ai lăsat adresa, în emailul de la Piuarfil. Altfel, sună la recepție: te ajutăm să vezi, să muți sau să anulezi programarea.</p>
+        <a class="btn btn-dark phone-link" href="#" style="justify-self:start">Sună la recepție: <span class="phone"></span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="contact" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><h2>Te așteptăm</h2></div>
+      <div class="contact">
+        <div class="card"><h3>Adresa</h3><p class="muted">Piuarfil Clinică Medicală<br>Dumbrăveni, jud. Suceava<br>Adresa exactă: de completat</p></div>
+        <div class="card"><h3>Telefon</h3><p class="muted">Recepție: <b class="phone" style="color:var(--navy)"></b><br>Instagram: <a href="https://www.instagram.com/piuarfil/" target="_blank" rel="noopener">@piuarfil</a><br>Pentru urgențe sunați la <b>112</b>.</p></div>
+        <div class="card"><h3>Program</h3><p class="muted">Luni–vineri, 09:00–16:00<br>Sâmbătă, 09:00–12:00<br>De confirmat cu clinica</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="mark" aria-hidden="true">Piuarfil</div>
+    <div class="row">
+      <span>© 2026 Piuarfil Clinică Medicală · <a href="#" data-privacy>Politica de confidențialitate</a></span>
+      <span>Din aceeași familie: PiuMedline, stomatologie în Ipotești și Rădăuți.</span>
+      <span><a href="/receptie">Acces personal</a></span>
+    </div>
+  </div>
+</footer>
+</div>
+
+
+<div class="modal" id="modal" role="dialog" aria-modal="true"><div class="card" id="modalCard"></div></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<script src="/common.js"></script>
+<script src="/site.js"></script>
+</body>
+</html>

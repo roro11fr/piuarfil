@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Programarea mea · Piuarfil</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Piuarfil, clinică medicală de familie în Dumbrăveni. Nouă medici, șapte specialități. Programează-te online, iar recepția te confirmă personal.">
+<meta property="og:title" content="Piuarfil Clinică Medicală · Programări online">
+<meta property="og:description" content="Alege medicul și ora online. Recepția te confirmă personal.">
+<meta name="theme-color" content="#11304D">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 56'%3E%3Cpath d='M32 6c9 6 11 20 0 30C21 26 23 12 32 6z' fill='%23C8B4A6'/%3E%3Cpath d='M8 26c10-5 23 0 26 14C20 44 10 37 8 26z' fill='%23A98E80'/%3E%3Cpath d='M56 26c-10-5-23 0-26 14 14 4 24-3 26-14z' fill='%23D9C2A8'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/app.css">
+<style>
+.pm{max-width:560px;margin:0 auto;padding:clamp(20px,5vw,48px) 16px 64px;display:grid;gap:1.4rem}
+.pm .card{display:grid;gap:1rem}
+.pm-doc{display:flex;gap:1rem;align-items:center}
+.pm-doc img{width:72px;height:72px;border-radius:50%;object-fit:cover;background:var(--sky)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="logo" viewBox="0 0 64 56">
+    <g>
+      <path d="M32 6c9 6 11 20 0 30C21 26 23 12 32 6z" fill="#C8B4A6" opacity=".9"/>
+      <path d="M8 26c10-5 23 0 26 14C20 44 10 37 8 26z" fill="#A98E80" opacity=".85"/>
+      <path d="M56 26c-10-5-23 0-26 14 14 4 24-3 26-14z" fill="#D9C2A8" opacity=".85"/>
+    </g>
+  </symbol>
+</svg>
+<header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="Piuarfil, pagina principală"><svg aria-hidden="true"><use href="#logo"/></svg><b>PIUARFIL<small>CLINICĂ MEDICALĂ</small></b></a></div></header>
+<main class="pm">
+  <h1 style="font-size:clamp(1.8rem,5vw,2.4rem)">Programarea ta</h1>
+  <div id="box" class="card" aria-live="polite"><p class="muted">Se încarcă…</p></div>
+  <p class="muted" style="font-size:.9rem">Acest link e personal. Nu-l trimite altor persoane.</p>
+</main>
+<div class="modal" id="modal" role="dialog" aria-modal="true"><div class="card" id="modalCard"></div></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<script src="/common.js"></script>
+<script>
+const token=location.pathname.split("/").pop();
+let A=null;
+function render(){
+  const a=A,box=$("#box");
+  const call=`<a class="btn btn-dark" href="${telHref(a.phone)}">Sună la recepție: ${esc(a.phone)}</a>`;
+  let msg="";
+  if(a.status==="pending")msg='<div class="alert info">Ora e rezervată pentru tine. Recepția îți verifică cererea și te sună să ți-o confirme.</div>';
+  if(a.status==="confirmed")msg='<div class="alert info" style="background:#E5F2EA;border-color:#BFDCC9;color:#1F5233">Programarea e confirmată. Te așteptăm.</div>';
+  if(a.status==="rejected")msg=`<div class="alert bad">Recepția nu a putut confirma cererea${a.note?": "+esc(a.note):"."} Poți face o <a href="/#programare">programare nouă</a> sau suna la recepție.</div>`;
+  if(a.status==="cancelled")msg='<div class="alert info">Programarea a fost anulată. Ora a devenit liberă pentru alți pacienți.</div>';
+  if(a.tooLate)msg+=`<div class="alert warn">Programarea e în mai puțin de 48 de ore, așa că nu mai poate fi anulată online. Dacă nu poți ajunge, sună la recepție.</div>`;
+  box.innerHTML=`<div class="pm-doc">${a.photo?`<img src="${esc(a.photo)}" alt="">`:""}<div><h3>${esc(a.doctor)}</h3><span class="muted">${esc(a.spec)}</span></div></div>
+    <div class="summary">
+      <div><span>Pacient</span><b>${esc(a.patient)}</b></div>
+      <div><span>Când</span><b>${fmtLong(a.day)}, ora ${a.slot}</b></div>
+      <div><span>Unde</span><b>Piuarfil, Dumbrăveni</b></div>
+      <div><span>Status</span>${statusPill(a.status)}</div>
+    </div>
+    ${msg}
+    <div style="display:flex;gap:.6rem;flex-wrap:wrap">${a.canCancel?'<button class="btn btn-ghost" id="cancel" style="color:var(--bad);border-color:#e4b2ab">Anulează programarea</button>':""}${a.status==="pending"||a.status==="confirmed"||a.status==="rejected"?call:""}</div>`;
+  const c=$("#cancel");if(c)c.onclick=()=>openModal(`<h3>Anulezi programarea?</h3><p class="muted">${esc(a.doctor)}, ${fmtLong(a.day)}, ora ${a.slot}. Ora devine liberă pentru alți pacienți.</p><p id="cErr" class="muted" style="color:var(--bad)"></p><div style="display:flex;gap:.6rem;justify-content:flex-end"><button class="btn btn-ghost" data-close>Păstrează</button><button class="btn btn-dark" id="cfCancel">Da, anulează</button></div>`,()=>{
+    $("#cfCancel").onclick=async()=>{const b=$("#cfCancel");b.disabled=true;b.textContent="Se anulează…";
+      try{await api(`/api/public/manage/${token}/cancel`,{method:"POST",body:{}});closeModal();toast("Programare anulată","Recepția a fost anunțată.");load()}
+      catch(e){$("#cErr").textContent=e.message;b.disabled=false;b.textContent="Da, anulează"}}});
+}
+async function load(){
+  try{A=await api(`/api/public/manage/${token}`);render()}
+  catch(e){$("#box").innerHTML=`<div class="alert bad">${esc(e.message)}</div><p class="muted">Dacă ai nevoie de ajutor, sună la recepție: <b>0752 192 733</b>.</p>`}
+}
+load();
+</script>
+</body>
+</html>
