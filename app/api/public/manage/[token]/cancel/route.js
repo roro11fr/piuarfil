@@ -15,7 +15,7 @@ export async function POST(_req, { params }) {
     update appointments set status = 'cancelled', cancelled_by = 'patient', note = 'Anulată de pacient din link', updated_at = now()
     where token = ${token} and status in ('pending','confirmed')
       and ((day + slot) at time zone 'Europe/Bucharest') - now() >= make_interval(hours => ${CANCEL_HOURS})
-    returning id, email, spec, day::text as day, slot, child_name`;
+    returning id, email, spec, day::text as day, slot, child_name, cancelled_by`;
   if (!u) return fail(`Programarea e în mai puțin de ${CANCEL_HOURS} de ore. Sună la recepție ca s-o anulezi.`, 409);
   await sql`insert into audit_log (appointment_id, action, detail) values (${u.id}, 'cancel_by_patient', ${sql.json({})})`;
   await notify("cancelled", u, a.doctor_name, null);

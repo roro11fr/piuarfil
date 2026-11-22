@@ -44,7 +44,7 @@ function _renderBooking(){
     p.innerHTML=`<div class="done-box">
       <div class="seal"><svg width="46" height="40" aria-hidden="true"><use href="#logo"/></svg></div>
       <h3>Cererea a fost trimisă</h3>
-      <p class="muted" style="max-width:48ch">Ora e rezervată pentru tine. Recepția îți verifică cererea și te sună să ți-o confirme${b.emailSent?`; primești confirmarea și pe email, la ${esc(b.email)}`:""}.</p>
+      <p class="muted" style="max-width:48ch">Ora e rezervată pentru tine. Recepția îți verifică cererea, iar confirmarea vine pe email, la <b>${esc(b.email)}</b>. Seara dinaintea programării primești și un reminder.</p>
       <div class="summary" style="width:100%;max-width:440px;text-align:left">
         <div><span>Medic</span><b>${esc(b.doctor)}</b></div>
         <div><span>Specialitate</span><b>${esc(b.spec)}</b></div>
@@ -101,8 +101,8 @@ function _renderBooking(){
         ${f.forChild?`<div class="field"><label for="fChild">Numele copilului *</label><input id="fChild" data-f="childName" value="${esc(f.childName)}" maxlength="80"></div>
         <div class="field"><label for="fAge">Vârsta copilului</label><input id="fAge" data-f="childAge" value="${esc(f.childAge)}" placeholder="ex. 4 ani" maxlength="30"></div>`:""}
         <div class="field"><label for="fName">${f.forChild?"Numele părintelui *":"Nume și prenume *"}</label><input id="fName" data-f="name" value="${esc(f.name)}" autocomplete="name" maxlength="80"></div>
-        <div class="field"><label for="fPhone">Telefon *</label><input id="fPhone" data-f="phone" value="${esc(f.phone)}" inputmode="tel" autocomplete="tel" placeholder="07xx xxx xxx" maxlength="20"><span class="hint">Recepția te sună pe acest număr ca să confirme.</span></div>
-        <div class="field full"><label for="fEmail">Email (opțional)</label><input id="fEmail" data-f="email" value="${esc(f.email)}" type="email" autocomplete="email" maxlength="120"><span class="hint">Dacă îl lași, primești confirmarea și pe email.</span></div>
+        <div class="field"><label for="fPhone">Telefon *</label><input id="fPhone" data-f="phone" value="${esc(f.phone)}" inputmode="tel" autocomplete="tel" placeholder="07xx xxx xxx" maxlength="20"><span class="hint">Recepția te sună doar dacă e nevoie.</span></div>
+        <div class="field full"><label for="fEmail">Email *</label><input id="fEmail" data-f="email" value="${esc(f.email)}" type="email" autocomplete="email" maxlength="120"><span class="hint">Aici primești confirmarea, linkul programării și reminderul de cu o zi înainte.</span></div>
         <div class="field full"><label for="fReason">Motivul vizitei *</label><textarea id="fReason" data-f="reason" maxlength="1000" placeholder="Descrie pe scurt ce simți sau de ce vii">${esc(f.reason)}</textarea></div>
         <div class="field"><label for="fPrev">Ai rezultate la analize anterioare?</label><textarea id="fPrev" data-f="prevResults" maxlength="1000" placeholder="ex. analize de sânge din octombrie">${esc(f.prevResults)}</textarea><span class="hint">Adu-le la consultație, pe hârtie sau pe telefon.</span></div>
         <div class="field"><label for="fCons">Ai mai fost la alți medici pentru asta?</label><textarea id="fCons" data-f="prevConsults" maxlength="1000" placeholder="ex. medicul de familie, cardiolog la Suceava">${esc(f.prevConsults)}</textarea></div>
@@ -128,7 +128,7 @@ function missingFields(f){
   if(f.forChild&&f.childName.trim().length<3)m.push("numele copilului");
   if(f.name.trim().length<3)m.push(f.forChild?"numele părintelui":"numele");
   const pd=f.phone.replace(/\D/g,"").length;if(pd<10||pd>13)m.push("telefonul (10 cifre)");
-  if(f.email.trim()&&!/^\S+@\S+\.\S+$/.test(f.email.trim()))m.push("un email valid sau lasă-l gol");
+  if(!/^\S+@\S+\.\S+$/.test(f.email.trim()))m.push("emailul");
   if(f.reason.trim().length<3)m.push("motivul vizitei");
   if(f.urgent===null)m.push("dacă e o urgență (Da/Nu)");
   if(!f.gdpr)m.push("acordul pentru prelucrarea datelor");

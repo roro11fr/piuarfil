@@ -4,21 +4,21 @@ Site-ul clinicii Piuarfil (Dumbrăveni) cu programări online și panou pentru r
 
 - **Site public** (`/`): prezentarea clinicii, echipa, specialitățile, programarea în 4 pași.
 - **Linkul personal al pacientului** (`/p/<cod>`): vede programarea și o poate anula cu minimum 48h înainte.
-- **Panou** (`/receptie`): recepția confirmă, respinge, mută și anulează cereri, adaugă programări primite la telefon, marchează zile libere și ține evidența pacienților anunțați. Medicii văd doar agenda proprie, fără să poată modifica.
+- **Panou** (`/receptie`): calendar pe zi (o coloană pe medic) și pe săptămână. Recepția confirmă, respinge, mută și anulează cereri, adaugă programări primite la telefon (click pe o oră liberă) și marchează zile libere. Medicii își văd calendarul propriu, fără să poată modifica.
 
 ## Cum funcționează
 - Pacientul trimite cererea, iar ora se blochează imediat (status „în așteptare”).
-- Recepția o vede în panou, o confirmă și apasă **WhatsApp**: se deschide WhatsApp (Web sau aplicația) cu mesajul gata scris și linkul personal al pacientului; recepția apasă Trimite. Dacă pacientul a lăsat email și emailul e configurat, primește automat și confirmarea pe email.
-- Tab-ul **Reminder mâine** listează pacienții de a doua zi, cu buton de reminder pe WhatsApp pentru fiecare.
+- Emailul e obligatoriu la programarea online. Pacientul primește **automat** email la fiecare pas: cerere primită, confirmată, mutată, respinsă, anulată, expirată. Recepția nu trimite nimic de mână.
+- **Reminderul** pleacă automat pe email în fiecare seară (job Vercel la 16:00 UTC: 18:00 iarna, 19:00 vara) către pacienții de a doua zi.
+- Excepția: pacienții fără email (programați la telefon). Panoul îi adună în caseta „De anunțat telefonic”, cu butoane Sună și WhatsApp (mesaj gata scris, fără date medicale).
 - Când un pacient își anulează programarea din link, recepția vede imediat un avertisment în panou („Anulări noi”), ca să poată da ora altcuiva.
-- Mesajele de WhatsApp nu conțin date medicale: doar medicul, ziua, ora și linkul.
-- Cererile neconfirmate: după 24h apar în panou cu „Așteaptă de …”; cele pentru mâine apar cu „Expiră la miezul nopții”. Dacă recepția nu le confirmă până în ziua programării, se anulează automat și ora se eliberează (pacientul vede în linkul lui că cererea a expirat). Nu e nevoie de un job programat: verificarea rulează la fiecare citire a disponibilității sau a panoului.
+- Cererile neconfirmate: după 24h apar în panou cu „Așteaptă de …”; cele pentru mâine apar cu „Expiră la miezul nopții”. Dacă recepția nu le confirmă până în ziua programării, se anulează automat, ora se eliberează și pacientul primește email.
 - O oră nu poate fi rezervată de două ori: baza de date garantează asta (index unic pe medic + zi + oră).
 - Regula de 48h la anulare e verificată pe server.
 - Sărbătorile legale și zilele libere ale medicilor închid automat ziua.
 
 ## Tehnologie
-Next.js (doar rutele `/api`), pagini statice în `public/`, PostgreSQL (Supabase), sesiuni semnate pentru personal. Fără SMS și fără Google Calendar. WhatsApp prin linkuri `wa.me`: fără cont de API, fără costuri; clinica are nevoie de WhatsApp (ideal WhatsApp Business) pe telefonul recepției, conectat la WhatsApp Web pe calculatorul ei.
+Next.js (doar rutele `/api`), pagini statice în `public/`, PostgreSQL (Supabase), sesiuni semnate pentru personal, emailuri prin Resend (gratuit până la 3.000/lună), job zilnic prin Vercel Cron. Fără SMS și fără Google Calendar: calendarul e în panou. WhatsApp doar pentru excepții, prin linkuri `wa.me`, fără costuri.
 
 ## Lansare (o singură dată)
 
@@ -38,11 +38,11 @@ Roluri: `admin`, `reception`, `doctor` (pentru doctor dai și id-ul medicului: b
 ### 3. GitHub + Vercel
 1. Urcă proiectul într-un repo GitHub (fără `node_modules`, `.next`, `.env.local`).
 2. Pe vercel.com: **Add New → Project → Import** repo-ul. Framework: Next.js (detectat automat).
-3. La **Environment Variables** adaugă variabilele din `.env.example` (`DATABASE_URL`, `SESSION_SECRET`, `PUBLIC_URL`, `CLINIC_PHONE`, opțional `RESEND_API_KEY` și `EMAIL_FROM`). Apasă **Deploy**.
+3. La **Environment Variables** adaugă variabilele din `.env.example` (`DATABASE_URL`, `SESSION_SECRET`, `PUBLIC_URL`, `CLINIC_PHONE`, `RESEND_API_KEY`, `EMAIL_FROM`, `CRON_SECRET`). Apasă **Deploy**. Jobul de seară din `vercel.json` pornește singur.
 4. **Settings → Domains**: adaugă domeniul clinicii, apoi actualizează `PUBLIC_URL` și redeployează.
 
-### 4. WhatsApp la recepție
-Instalează WhatsApp Business pe telefonul recepției și conectează-l la WhatsApp Web (web.whatsapp.com) pe calculatorul din care se lucrează în panou.
+### 4. Email (Resend)
+Cont pe resend.com → **Domains → Add domain** (ex. piuarfil.ro) → adaugă recordurile DNS la furnizorul domeniului → **API Keys → Create**. Cheia e `RESEND_API_KEY`; `EMAIL_FROM` folosește domeniul verificat.
 
 ### 5. Pune linkul în bio-ul de Instagram @piuarfil.
 

@@ -47,7 +47,7 @@ function render(){
   const a=A,box=$("#box");
   const call=`<a class="btn btn-dark" href="${telHref(a.phone)}">Sună la recepție: ${esc(a.phone)}</a>`;
   let msg="";
-  if(a.status==="pending")msg='<div class="alert info">Ora e rezervată pentru tine. Recepția îți verifică cererea și te sună să ți-o confirme.</div>';
+  if(a.status==="pending")msg='<div class="alert info">Ora e rezervată pentru tine. Recepția îți verifică cererea și primești confirmarea pe email.</div>';
   if(a.status==="confirmed")msg='<div class="alert info" style="background:#E5F2EA;border-color:#BFDCC9;color:#1F5233">Programarea e confirmată. Te așteptăm.</div>';
   if(a.status==="rejected")msg=`<div class="alert bad">Recepția nu a putut confirma cererea${a.note?": "+esc(a.note):"."} Poți face o <a href="/#programare">programare nouă</a> sau suna la recepție.</div>`;
   if(a.status==="cancelled")msg=a.expired?`<div class="alert bad">Ne cerem scuze, recepția nu a apucat să confirme cererea la timp, așa că ea a expirat. Sună la recepție și găsim împreună o oră.</div>`:'<div class="alert info">Programarea a fost anulată. Ora a devenit liberă pentru alți pacienți.</div>';

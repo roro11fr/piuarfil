@@ -23,12 +23,15 @@ for (let off = -10; off <= 14; off++) {
       const spec = pick(doc.specs), r = rnd(), child = spec.includes("ediatr");
       const status = off < 0 ? (r < .88 ? "confirmed" : "cancelled") : off <= 1 ? "confirmed" : r < .2 ? "pending" : r < .9 ? "confirmed" : "cancelled";
       const name = pick(FN) + " " + pick(LN);
+      // online: email obligatoriu; la telefon, unii pacienți nu au email
+      const source = rnd() < .25 ? "telefon" : "online", email = source === "online" || rnd() < .4 ? "pacient" + n + "@exemplu.ro" : null;
       try {
         await sql`insert into appointments ${sql({ ref: "PF-" + crypto.randomInt(1000, 99999), token: crypto.randomBytes(18).toString("base64url"), doctor_id: doc.id, spec, day, slot, status,
-          source: rnd() < .25 ? "telefon" : "online", patient_name: name, phone: "07" + crypto.randomInt(10000000, 99999999), email: rnd() < .4 ? "pacient" + n + "@exemplu.ro" : null,
+          source, patient_name: name, phone: "07" + crypto.randomInt(10000000, 99999999), email,
           child_name: child ? pick(["Matei","Ana","Luca","Sofia","David"]) + " " + name.split(" ")[1] : null, child_age: child ? Math.floor(1 + rnd() * 12) + " ani" : null,
           reason: "[demo] " + pick(R[spec]), prev_results: rnd() < .3 ? "Analize de sânge de luna trecută." : null, prev_consults: rnd() < .2 ? "Trimis de medicul de familie." : null,
-          cancelled_by: status === "cancelled" ? "patient" : null, urgent: status === "pending" && rnd() < .12, notified: status === "confirmed" && (off < 0 || rnd() < .6), note: "demo" })}`;
+          cancelled_by: status === "cancelled" ? "patient" : null, urgent: status === "pending" && rnd() < .12, notified: status !== "pending" && (!!email || source === "telefon" || off < 0) && !(status === "confirmed" && !email && off >= 0 && rnd() < .15),
+          reminded_at: status === "confirmed" && off < 0 ? new Date() : null, note: "demo" })}`;
         n++;
       } catch (e) { if (e.code !== "23505") throw e; }
     }

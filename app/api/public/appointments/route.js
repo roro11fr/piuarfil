@@ -17,7 +17,7 @@ const Body = z.object({
   childAge: t(30).optional().default(""),
   name: t(80).min(3),
   phone: z.string().refine((p) => { const d = digits(p); return d.length >= 10 && d.length <= 13; }),
-  email: z.union([z.literal(""), z.string().trim().email().max(120)]).optional().default(""),
+  email: z.string().trim().email().max(120), // obligatoriu: pe email vin confirmarea și reminderul
   reason: t(1000).min(3),
   prevResults: t(1000).optional().default(""),
   prevConsults: t(1000).optional().default(""),
@@ -47,7 +47,7 @@ export async function POST(req) {
   try {
     a = await insertAppointment(sql, {
       doctor_id: b.doctor, spec: b.spec, day: b.day, slot: b.slot, status: "pending", source: "online",
-      patient_name: b.name, phone, email: b.email || null,
+      patient_name: b.name, phone, email: b.email.toLowerCase(),
       child_name: b.forChild ? b.childName : null, child_age: b.forChild ? b.childAge || null : null,
       reason: b.reason, prev_results: b.prevResults || null, prev_consults: b.prevConsults || null,
       urgent: b.urgent, consent_at: new Date(),

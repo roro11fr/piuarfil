@@ -25,7 +25,12 @@ export async function GET(req) {
   const rows = await sql`select ${COLS} from appointments a join doctors d on d.id = a.doctor_id
     where a.day between ${from} and ${to} and (${doctor}::text is null or a.doctor_id = ${doctor})
     order by a.day, a.slot`;
-  return json({ appointments: rows, today });
+  const [daysOff, holidays] = await Promise.all([
+    sql`select o.doctor_id, o.day::text as day, o.reason from days_off o where o.day between ${from} and ${to}
+        and (${doctor}::text is null or o.doctor_id = ${doctor})`,
+    sql`select day::text as day, name from holidays where day between ${from} and ${to}`,
+  ]);
+  return json({ appointments: rows, daysOff, holidays, today, from, to });
 }
 
 // Programare primită la telefon: intră direct confirmată.
@@ -56,6 +61,6 @@ export async function POST(req) {
       return r;
     });
   } catch (e) { if (e.code === "SLOT_TAKEN") return fail("Ora nu mai e liberă.", 409); throw e; }
-  await notify("confirmed", a, doc.name, `${baseUrl(req)}/p/${a.token}`);
-  return json({ ref: a.ref }, 201);
+  const { sent } = await notify("confirmed", a, doc.name, `${baseUrl(req)}/p/${a.token}`);
+  return json({ ref: a.ref, emailSent: sent }, 201);
 }

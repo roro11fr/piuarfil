@@ -52,6 +52,8 @@ export async function POST(req, { params }) {
     if (e.code === "23505") return fail("Ora nouă nu mai e liberă.", 409);
     throw e;
   }
+  // Pacientul primește automat email. Dacă nu are email, programarea rămâne „de anunțat telefonic”.
   const sent = mail ? (await notify(mail, row, cur.doctor_name, `${baseUrl(req)}/p/${row.token}`)).sent : false;
-  return json({ ok: true, emailSent: sent });
+  if (sent) await sql`update appointments set notified = true where id = ${id}`;
+  return json({ ok: true, emailSent: sent, hasEmail: !!row.email });
 }

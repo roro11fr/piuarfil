@@ -34,7 +34,7 @@ function showPrivacy(phone){openModal(`<h3>Politica de confidențialitate</h3>
   <p class="alert warn" style="margin:0">Draft. Se validează cu clinica și cu un jurist înainte de lansare.</p>
   <div style="display:grid;gap:.7rem;font-size:.93rem">
   <p><b>Cine prelucrează datele.</b> Piuarfil Clinică Medicală, Dumbrăveni, jud. Suceava (date de identificare de completat).</p>
-  <p><b>Ce date colectăm.</b> Nume, telefon, email (opțional), numele copilului dacă programarea e pentru el, motivul vizitei, informații despre analize și consulturi anterioare, dacă e o urgență.</p>
+  <p><b>Ce date colectăm.</b> Nume, telefon, email (pentru confirmare și reminder), numele copilului dacă programarea e pentru el, motivul vizitei, informații despre analize și consulturi anterioare, dacă e o urgență.</p>
   <p><b>De ce.</b> Doar pentru a programa consultația și a o pregăti. Datele despre sănătate le prelucrăm pe baza acordului tău explicit (art. 9 alin. 2 lit. a din GDPR).</p>
   <p><b>Cine le vede.</b> Recepția și medicul la care te programezi. Datele sunt găzduite în Uniunea Europeană. Nu le vindem și nu le folosim pentru reclame.</p>
   <p><b>Cât le păstrăm.</b> Perioadă de stabilit cu clinica, după care se șterg.</p>

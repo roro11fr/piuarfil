@@ -360,3 +360,58 @@ body.rx #reception{display:block}
 
 .btn-wa{background:#1F8F55;color:#fff}.btn-wa:hover{background:#18784A}.btn-wa svg{flex:none}
 .rx-actions a.btn{text-decoration:none}
+
+/* ---------- calendar panou ---------- */
+.cal-bar{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:.8rem}
+.cal-nav{display:inline-flex;gap:.3rem;align-items:center}
+.cal-nav button{min-width:38px}
+.cal-title{font-family:var(--display);font-weight:600;font-size:1.15rem;margin:0 .4rem;text-transform:capitalize;font-variant-numeric:tabular-nums}
+.cal-bar .grow{flex:1}
+.seg{display:inline-flex;border:1.5px solid var(--line);border-radius:999px;padding:3px;background:#fff}
+.seg button{border:0;background:none;border-radius:999px;padding:.35rem .9rem;font-weight:600;color:var(--muted);cursor:pointer;font-size:.9rem}
+.seg button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.cal-scroll{overflow:auto;background:#fff;border:1px solid var(--line);border-radius:var(--r);max-height:calc(100vh - 150px);margin-bottom:3rem;overscroll-behavior:contain}
+.cal{display:grid;min-width:min-content;position:relative}
+.cal-head{position:sticky;top:0;z-index:4;background:#fff;border-bottom:1px solid var(--line);padding:.55rem .6rem;display:flex;align-items:center;gap:.5rem;min-height:58px;border-left:1px solid var(--line);font-size:.88rem;line-height:1.2;text-align:left;font-family:inherit;color:var(--navy)}
+button.cal-head{cursor:pointer;border-top:0;border-right:0}
+button.cal-head:hover{background:#f4f8fb}
+.cal-head img{width:32px;height:32px;border-radius:50%;object-fit:cover;flex:none}
+.cal-head b{display:block;font-size:.9rem}
+.cal-head small{color:var(--muted);font-size:.78rem}
+.cal-head.today b{color:var(--blue)}
+.cal-corner{position:sticky;top:0;left:0;z-index:6;background:#fff;border-bottom:1px solid var(--line)}
+.cal-axis{position:sticky;left:0;z-index:3;background:#fff}
+.cal-axis span{position:absolute;right:8px;transform:translateY(-50%);font-size:.75rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.cal-col{position:relative;border-left:1px solid var(--line);background-image:linear-gradient(to bottom,var(--line) 1px,transparent 1px);background-size:100% var(--hour)}
+.cal-off{position:absolute;left:0;right:0;background:repeating-linear-gradient(135deg,#f1f4f7 0 6px,#e9eef3 6px 12px);z-index:0}
+.cal-closed{position:absolute;inset:0;display:grid;place-items:start center;padding-top:1.2rem;z-index:1;color:var(--muted);font-size:.82rem;text-align:center;font-weight:600}
+.cal-slot{position:absolute;left:3px;right:3px;border:0;border-radius:8px;background:transparent;z-index:1;cursor:pointer;font-size:.75rem;color:transparent;text-align:left;padding:0 .5rem;font-family:inherit}
+.cal-slot:hover,.cal-slot:focus-visible{background:#eaf2f9;color:var(--blue);outline:1.5px dashed var(--blue);outline-offset:-1.5px}
+.cal-ev{position:absolute;left:3px;right:3px;z-index:2;border-radius:8px;border:0;text-align:left;padding:.2rem .5rem;font:inherit;font-size:.8rem;line-height:1.2;cursor:pointer;overflow:hidden;background:#dce9f5;color:var(--navy);border-left:4px solid var(--blue)}
+.cal-ev:hover{filter:brightness(.97);box-shadow:0 6px 16px -10px rgba(17,48,77,.6)}
+.cal-ev b{font-variant-numeric:tabular-nums;margin-right:.3rem}
+.cal-ev .nm{font-weight:600}
+.cal-ev small{display:block;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-ev.pend{background:#fbf3e1;border-left-color:#C9962B;outline:1.5px dashed #d9b46a;outline-offset:-1.5px}
+.cal-ev.urg{border-left-color:var(--bad)}
+.cal-ev.past{opacity:.6}
+.cal-ev.short small{display:none}
+.cal-ev.short{white-space:nowrap;text-overflow:ellipsis}
+.cal-now{position:absolute;left:0;right:0;height:2px;background:var(--bad);z-index:3;pointer-events:none}
+.cal-now::before{content:"";position:absolute;left:-4px;top:-4px;width:10px;height:10px;border-radius:50%;background:var(--bad)}
+.cal-legend{display:flex;gap:1rem;flex-wrap:wrap;font-size:.82rem;color:var(--muted);margin:-.2rem 0 .8rem}
+.cal-legend i{display:inline-block;width:14px;height:14px;border-radius:4px;margin-right:.4rem;vertical-align:-2px;border:1px solid var(--line)}
+.todo{background:#fff;border:1px solid var(--line);border-left:4px solid var(--warn);border-radius:var(--r);padding:.8rem 1rem;margin-bottom:1rem}
+.todo h3{margin:0 0 .3rem;font-size:1rem}
+.todo-row{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;padding:.45rem 0;border-top:1px solid var(--line);font-size:.92rem}
+.todo-row:first-of-type{border-top:0}
+.todo-row span{flex:1;min-width:200px}
+.todo-row a.btn{text-decoration:none}
+.ad{display:grid;grid-template-columns:1fr 1fr;gap:.8rem 1.2rem;font-size:.93rem}
+.ad h4{margin:0 0 .15rem;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.ad .full{grid-column:1/-1}
+.ad-acts{display:flex;gap:.5rem;flex-wrap:wrap}
+.ad-acts a.btn{text-decoration:none}
+@media (max-width:600px){.ad{grid-template-columns:1fr}.cal-title{width:100%;order:-1;margin:0}.cal-scroll{max-height:none}}
+button.stat{font:inherit;text-align:left;cursor:pointer;color:inherit;transition:border-color .15s}
+button.stat:hover{border-color:var(--blue)}
