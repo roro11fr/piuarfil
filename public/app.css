@@ -415,3 +415,10 @@ button.cal-head:hover{background:#f4f8fb}
 @media (max-width:600px){.ad{grid-template-columns:1fr}.cal-title{width:100%;order:-1;margin:0}.cal-scroll{max-height:none}}
 button.stat{font:inherit;text-align:left;cursor:pointer;color:inherit;transition:border-color .15s}
 button.stat:hover{border-color:var(--blue)}
+/* telefoane înguste (360–420px): logo-ul și butonul încap pe un rând */
+@media (max-width:420px){.brand{gap:.5rem}.brand svg{width:32px;height:28px}.brand b{font-size:.92rem;letter-spacing:.2em}.brand b small{letter-spacing:.16em}.nav .btn-sm{white-space:nowrap;padding:.5rem .85rem;font-size:.85rem}}
+/* ecranul final al programării nu iese din lățimea telefonului */
+.done-box{grid-template-columns:minmax(0,1fr)}
+.done-box>*{max-width:100%}
+.summary div b{text-align:right;min-width:0;overflow-wrap:anywhere}
+.linkrow input{width:0}.linkrow .btn{flex:none}
