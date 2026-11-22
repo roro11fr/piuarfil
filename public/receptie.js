@@ -10,7 +10,7 @@ const nameOf=a=>a.child_name||a.patient_name;
 const toMin=t=>{const [h,m]=String(t).split(":").map(Number);return h*60+m};
 const toT=m=>`${String(Math.floor(m/60)).padStart(2,"0")}:${String(m%60).padStart(2,"0")}`;
 const weekdayOf=d=>new Date(d+"T12:00:00Z").getUTCDay();
-const mondayOf=d=>addDaysStr(d,-((weekdayOf(d)+6)%7));
+const mondayOf=d=>weekdayOf(d)===0?addDaysStr(d,1):addDaysStr(d,1-weekdayOf(d)); // duminica (clinica închisă) arată săptămâna care urmează
 const nowTime=()=>new Date().toLocaleTimeString("en-GB",{timeZone:"Europe/Bucharest",hour:"2-digit",minute:"2-digit",hourCycle:"h23"});
 
 /* WhatsApp: doar pentru pacienții fără email. Mesajul e gata scris, fără date medicale. */
@@ -311,7 +311,7 @@ $("#rxBody").addEventListener("change",e=>{
   if(e.target.id==="calDate"&&e.target.value){S.calDay=e.target.value;S._scrollTop=null;ensureRange()}
 });
 $("#rxBody").addEventListener("input",e=>{if(e.target.id==="rxQ"){S.q=e.target.value;const pos=e.target.selectionStart;render();const n=$("#rxQ");n.focus();n.setSelectionRange(pos,pos)}});
-$("#logout").onclick=async()=>{await api("/api/staff/logout",{method:"POST",body:{}}).catch(()=>{});clearInterval(_poll);S.lastPending=null;S.me=null;renderLogin()};
+$("#logout").onclick=async()=>{await api("/api/staff/logout",{method:"POST",body:{}}).catch(()=>{});clearInterval(_poll);Object.assign(S,{lastPending:null,lastCancels:undefined,me:null,view:null,doc:"",q:"",calDay:null,calMode:"day",_scrollTop:null});renderLogin()};
 
 function phoneBooking(pre){
   const fixed=pre&&pre.doc,d=fixed?docById(pre.doc):null;

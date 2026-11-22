@@ -24,7 +24,7 @@ for (let off = -10; off <= 14; off++) {
       const status = off < 0 ? (r < .88 ? "confirmed" : "cancelled") : off <= 1 ? "confirmed" : r < .2 ? "pending" : r < .9 ? "confirmed" : "cancelled";
       const name = pick(FN) + " " + pick(LN);
       // online: email obligatoriu; la telefon, unii pacienți nu au email
-      const source = rnd() < .25 ? "telefon" : "online", email = source === "online" || rnd() < .4 ? "pacient" + n + "@exemplu.ro" : null;
+      const source = status !== "pending" && rnd() < .25 ? "telefon" : "online", email = source === "online" || rnd() < .4 ? "pacient" + n + "@exemplu.ro" : null;
       try {
         await sql`insert into appointments ${sql({ ref: "PF-" + crypto.randomInt(1000, 99999), token: crypto.randomBytes(18).toString("base64url"), doctor_id: doc.id, spec, day, slot, status,
           source, patient_name: name, phone: "07" + crypto.randomInt(10000000, 99999999), email,
